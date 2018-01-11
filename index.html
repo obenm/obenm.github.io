@@ -1,0 +1,80 @@
+<!doctype HTML>
+<html>
+<script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
+<script src="https://rawgit.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.js"> </script>
+<script src="https://unpkg.com/aframe-text-component@^0.4.2/dist/aframe-text-component.min.js"></script>
+<script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <body style='margin : 0px; overflow: hidden;'>
+    <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false'>
+	
+		<a-assets>
+			<a-asset-item id="optimerBoldFont" src="https://rawgit.com/mrdoob/three.js/dev/examples/fonts/optimer_bold.typeface.json"></a-asset-item>
+			<a-mixin id="boldFont" text="font: #optimerBoldFont"></a-mixin>
+		</a-assets>
+		
+		<a-assets>
+			<a-asset-item id="ranchoFont" src="Rancho_Regular.json"></a-asset-item>
+			<a-mixin id="boldFontForRancho" text="font: #ranchoFont"></a-mixin>
+		</a-assets>
+		
+		<a-assets>
+			<a-asset-item id="pacificoFont" src="Pacifico_Regular.json"></a-asset-item>
+			<a-mixin id="boldFontForRancho" text="font: #pacificoFont"></a-mixin>
+		</a-assets>
+		
+		<a-assets>
+			<a-asset-item id="heart" src="Heart.obj"></a-asset-item>
+		</a-assets>
+		  
+		<a-marker type='pattern' url='pattern-marker.patt'>
+			<a-entity text-geometry="value: 09/Diciembre/2016; font: #pacificoFont;" material="color: #ededed" rotation='180 0 0' position='-2 -2 0' scale="0.5 0.5 0.5"></a-entity>
+			<a-entity id="daysCount" text-geometry="value: 150; font: #pacificoFont;" material="color: #1ca9d8" rotation='180 0 0' position='-2.5 -0.5 0' Scale='3 3 3'></a-entity>
+			<!-- <a-entity text-geometry="value: <3; font: #pacificoFont; letterSpacing: -100" material="color: #d61b1b" rotation='180 0 0' position='0.2 -0.1 0' Scale='3 1.5 1.5'></a-entity> -->
+			<a-entity obj-model="obj: #heart;" material="color: #d61b1b" rotation='190 270 0' position='0.7 0 -0.5' scale='0.2 0.2 0.27'></a-entity>
+			<a-entity text-geometry="value: dias; font: #pacificoFont;" material="color: #ededed" rotation='180 0 0' position='0.2 -1 0' Scale='1 0.8 0.8'></a-entity>
+			<a-entity id="fyo" text-geometry="value: F&O; font: #pacificoFont;" material="color: #fff714" rotation='180 0 0' position='-2.45 0.6 0' scale="1.9 1.3 1.3"></a-entity>
+			<a-entity id="yearMonthCount" text-geometry="value: Count; font: #pacificoFont;" material="color: #ededed" rotation='180 0 0' position='-1.20 0.85 0' scale="0.3 0.3 0.3"></a-entity>
+		</a-marker>
+		
+		<a-entity camera='zoom: 5'></a-entity>
+		
+	</a-scene>
+	
+	<script>
+		$(document).ready(function() {
+			var dateObj = new Date();
+			var month = dateObj.getMonth() + 1; //months from 1-12
+			var day = dateObj.getDate();
+			var year = dateObj.getFullYear();
+			var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+			var firstDate = new Date(2016, 12, 09);
+			var secondDate = new Date(year, month, day);
+			var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+			var result = 'value: ' + diffDays + '; font: #pacificoFont;';
+			$("#daysCount").attr('text-geometry', result);
+			
+			var oneMonth = 30*24*60*60*1000; // days*hours*minutes*seconds*milliseconds
+			var diffMonth = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneMonth)));
+			
+			var oneYear = 365*24*60*60*1000; // days*hours*minutes*seconds*milliseconds
+			var diffYears = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneYear)));
+			result = 'value: ' + diffYears + ' year - ' + diffMonth + 'meses; font: #pacificoFont;';
+			$("#yearMonthCount").attr('text-geometry', result);
+			
+			
+			$( "#photos" ).on('touchend', function() {
+				alert("click 1");
+				$("#info").attr('visible', "true");
+				$("#photos").attr('visible', "false");
+			});
+			
+			$( "#info" ).on('touchend', function() {
+				alert("click 2");
+				$("#photos").attr('visible', "true");
+				$("#info").attr('visible', "false");
+			});
+		});
+	</script>
+  </body>
+</html>
